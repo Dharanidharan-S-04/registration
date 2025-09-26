@@ -1,9 +1,7 @@
 package io.mosip.registration.processor.packet.storage.utils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 
@@ -116,6 +114,59 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
         }
 
         FieldResponseDto fieldResponseDto = objectMapper.readValue(JsonUtils.javaObjectToJsonString(response.getResponse()), FieldResponseDto.class);
+
+        try {
+            FieldDtos fieldDto2 = new FieldDtos(id, fields, "REGISTRATION_CLIENT", "MVS_DOC", false);
+            RequestWrapper<FieldDtos> request2 = new RequestWrapper<>();
+            request2.setId(ID);
+            request2.setVersion(VERSION);
+            request2.setRequesttime(DateUtils.getUTCCurrentDateTime());
+            request2.setRequest(fieldDto2);
+            ResponseWrapper<FieldResponseDto> response2 = (ResponseWrapper) restApi.postApi(
+                    ApiName.PACKETMANAGER_SEARCH_FIELDS, "", "", request2, ResponseWrapper.class);
+
+            if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
+                ErrorDTO errorDTO = response2.getErrors().iterator().next();
+                if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
+                    ErrorDTO errorDTO1 = response.getErrors().iterator().next();
+                    if (OBJECT_DOESNOT_EXISTS_ERROR_CODE.equalsIgnoreCase(errorDTO1.getErrorCode())) {
+                        throw new ObjectDoesnotExistsException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
+                    } else {
+                        throw new PacketManagerException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
+                    }
+                }
+            }
+
+            if (response2.getErrors() == null) {
+                FieldResponseDto fieldResponseDto2 = objectMapper.readValue(
+                        JsonUtils.javaObjectToJsonString(response2.getResponse()), FieldResponseDto.class);
+
+                Map<String, String> finalFields = new HashMap<>();
+
+                Map<String, String> fields1 = fieldResponseDto.getFields();
+                Map<String, String> fields2 = fieldResponseDto2.getFields();
+
+                Set<String> allKeys = new HashSet<>();
+                if (fields1 != null) allKeys.addAll(fields1.keySet());
+
+                for (String key : allKeys) {
+                    String value2 = fields2.get(key);
+                    String value1 = fields1.get(key);
+
+                    if (value2 != null && !value2.trim().isEmpty() && !"null".equalsIgnoreCase(value2)) {
+                        finalFields.put(key, value2);
+                    } else {
+                        finalFields.put(key, value1);
+                    }
+                }
+                return (finalFields);
+            }
+            else {
+                regProcLogger.warn("Second API returned errors for id=" + id + ", using only first response");
+            }
+        }catch (Exception e) {
+            regProcLogger.warn("Second API call failed for id=" + id + ", using only first response", e);
+        }
 
         return fieldResponseDto.getFields();
     }
