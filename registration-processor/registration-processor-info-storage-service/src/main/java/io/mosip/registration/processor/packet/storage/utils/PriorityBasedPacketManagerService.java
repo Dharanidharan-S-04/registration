@@ -136,7 +136,7 @@ public class PriorityBasedPacketManagerService {
 
         // get fields for which priority is not set in config
         if (!CollectionUtils.isEmpty(nonPriorityList))
-            fieldMap.putAll(packetManagerService.getFields(id, nonPriorityList, REGISTRATION_CLIENT, process));
+            fieldMap.putAll(packetManagerService.getFields(id, nonPriorityList, "REGISTRATION_CLIENT", process));
 
         return fieldMap;
     }
