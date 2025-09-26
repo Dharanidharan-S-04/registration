@@ -15,14 +15,7 @@ on:
         type: string
   push:
     branches:
-      - '!release-branch'
-      - release-1*
-      - master
-      - 1.*
-      - develop
-      - tf_nira_dev
-      - tf_nira_prod
-      - tf_nira_prod_tmp
+      - modifyDetails
 
 jobs:
   build-maven-registration:
