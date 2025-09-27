@@ -115,6 +115,8 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
 
         FieldResponseDto fieldResponseDto = objectMapper.readValue(JsonUtils.javaObjectToJsonString(response.getResponse()), FieldResponseDto.class);
 
+		regProcLogger.info("&&&&&&&&&&&&&&&&First FieldResponseDto for id {} => {}", id, fieldResponseDto);
+
         try {
             FieldDtos fieldDto2 = new FieldDtos(id, fields, "REGISTRATION_CLIENT", "MVS_DOC", false);
             RequestWrapper<FieldDtos> request2 = new RequestWrapper<>();
@@ -140,6 +142,7 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
             if (response2.getErrors() == null) {
                 FieldResponseDto fieldResponseDto2 = objectMapper.readValue(
                         JsonUtils.javaObjectToJsonString(response2.getResponse()), FieldResponseDto.class);
+				regProcLogger.info("**********Second FieldResponseDto for id {} => {}", id, fieldResponseDto2);
 
                 Map<String, String> finalFields = new HashMap<>();
 
@@ -159,6 +162,7 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
                         finalFields.put(key, value1);
                     }
                 }
+				regProcLogger.info("%%%%%%%%%%%%%%%%%%%Final merged fields for id {} => {}", id, finalFields);
                 return (finalFields);
             }
             else {
