@@ -126,31 +126,36 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
             request2.setRequest(fieldDto2);
             ResponseWrapper<FieldResponseDto> response2 = (ResponseWrapper) restApi.postApi(
                     ApiName.PACKETMANAGER_SEARCH_FIELDS, "", "", request2, ResponseWrapper.class);
+   
+			regProcLogger.info("Second API response2 for id {}: {}", id, JsonUtils.javaObjectToJsonString(response2));
 
-           if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
+            if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
                     ErrorDTO errorDTO1 = response2.getErrors().iterator().next();
-                regProcLogger.info("@@@@@ Second API error for id {}: code={}, message={}",
+                regProcLogger.info("Second API error for id {}: code={}, message={}",
                         id, errorDTO1.getErrorCode(), errorDTO1.getMessage());
                     if (OBJECT_DOESNOT_EXISTS_ERROR_CODE.equalsIgnoreCase(errorDTO1.getErrorCode())) {
                         throw new ObjectDoesnotExistsException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
                     } else {
                         throw new PacketManagerException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
                     }
+
             }
 
             if (response2.getErrors() == null) {
                 FieldResponseDto fieldResponseDto2 = objectMapper.readValue(
                         JsonUtils.javaObjectToJsonString(response2.getResponse()), FieldResponseDto.class);
-				regProcLogger.info("**********Second FieldResponseDto for id {} => {}", id, fieldResponseDto2);
+
+                regProcLogger.info("Second API fieldResponseDto2 for id {}: {}", id, JsonUtils.javaObjectToJsonString(fieldResponseDto2));
 
                 Map<String, String> finalFields = new HashMap<>();
-
                 Map<String, String> fields1 = fieldResponseDto.getFields();
                 Map<String, String> fields2 = fieldResponseDto2.getFields();
+				
+                regProcLogger.info("fields1 for id {}: {}", id, JsonUtils.javaObjectToJsonString(fields1));
+                regProcLogger.info("fields2 for id {}: {}", id, JsonUtils.javaObjectToJsonString(fields2));
 
                 Set<String> allKeys = new HashSet<>();
                 if (fields1 != null) allKeys.addAll(fields1.keySet());
-
                 for (String key : allKeys) {
                     String value2 = fields2.get(key);
                     String value1 = fields1.get(key);
@@ -161,7 +166,7 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
                         finalFields.put(key, value1);
                     }
                 }
-				regProcLogger.info("%%%%%%%%%%%%%%%%%%%Final merged fields for id {} => {}", id, finalFields);
+                regProcLogger.info("Final merged fields for id {}: {}", id, JsonUtils.javaObjectToJsonString(finalFields));
                 return (finalFields);
             }
             else {
