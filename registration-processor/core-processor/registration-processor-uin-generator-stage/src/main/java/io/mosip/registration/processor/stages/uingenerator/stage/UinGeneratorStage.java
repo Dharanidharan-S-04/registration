@@ -252,6 +252,7 @@ public class UinGeneratorStage extends MosipVerticleAPIManager {
 				Map<String, String> fieldMap = packetManagerService.getFields(registrationId,
 						idSchemaUtil.getDefaultFields(Double.valueOf(schemaVersion)), registrationStatusDto.getRegistrationType(), ProviderStageName.UIN_GENERATOR);
 				String uinField = fieldMap.get(utility.getMappingJsonValue(MappingJsonConstants.UIN, MappingJsonConstants.IDENTITY));
+				regProcLogger.info("##############################FieldMap for registrationId {}: {}", registrationId, fieldMap);
 				JSONObject demographicIdentity = new JSONObject();
 				if ((StringUtils.isEmpty(uinField) || uinField.equalsIgnoreCase("null"))
 				        && (RegistrationType.UPDATE.toString().equalsIgnoreCase(object.getReg_type())
@@ -270,6 +271,8 @@ public class UinGeneratorStage extends MosipVerticleAPIManager {
 				demographicIdentity.put(MappingJsonConstants.IDSCHEMA_VERSION, convertIdschemaToDouble ? Double.valueOf(schemaVersion) : schemaVersion);
 
 				loadDemographicIdentity(fieldMap, demographicIdentity);
+				regProcLogger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ DemographicIdentity after loading fieldMap for registrationId {}: {}",
+                 registrationId, demographicIdentity);
 
 				if (StringUtils.isEmpty(uinField) || uinField.equalsIgnoreCase("null") ) {
 
@@ -1165,3 +1168,4 @@ public class UinGeneratorStage extends MosipVerticleAPIManager {
 		}
 	}
 }
+
