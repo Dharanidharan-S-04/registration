@@ -141,7 +141,8 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
 
             }
 
-            if (response2.getErrors() == null ||  || response2.getErrors().isEmpty()) {
+           List<ErrorDTO> response2Errors = response2.getErrors();
+            if (response2Errors == null || response2Errors.size() == 0) {
                 FieldResponseDto fieldResponseDto2 = objectMapper.readValue(
                         JsonUtils.javaObjectToJsonString(response2.getResponse()), FieldResponseDto.class);
 
