@@ -127,16 +127,15 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
             ResponseWrapper<FieldResponseDto> response2 = (ResponseWrapper) restApi.postApi(
                     ApiName.PACKETMANAGER_SEARCH_FIELDS, "", "", request2, ResponseWrapper.class);
 
-            if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
-                ErrorDTO errorDTO = response2.getErrors().iterator().next();
-                if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
-                    ErrorDTO errorDTO1 = response.getErrors().iterator().next();
+           if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
+                    ErrorDTO errorDTO1 = response2.getErrors().iterator().next();
+                regProcLogger.info("@@@@@ Second API error for id {}: code={}, message={}",
+                        id, errorDTO1.getErrorCode(), errorDTO1.getMessage());
                     if (OBJECT_DOESNOT_EXISTS_ERROR_CODE.equalsIgnoreCase(errorDTO1.getErrorCode())) {
                         throw new ObjectDoesnotExistsException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
                     } else {
                         throw new PacketManagerException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
                     }
-                }
             }
 
             if (response2.getErrors() == null) {
