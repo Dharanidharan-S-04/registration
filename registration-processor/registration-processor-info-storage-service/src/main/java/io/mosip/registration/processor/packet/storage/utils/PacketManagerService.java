@@ -118,7 +118,7 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
 		regProcLogger.info("&&&&&&&&&&&&&&&&First FieldResponseDto for id {} => {}", id, fieldResponseDto);
 
         try {
-            FieldDtos fieldDto2 = new FieldDtos(id, fields, "REGISTRATION_CLIENT", "MVS_DOC", false);
+            FieldDtos fieldDto2 = new FieldDtos(id, fields, "REGISTRATION_CLIENT", "MVS_DEMOGRAPHIC", false);
             RequestWrapper<FieldDtos> request2 = new RequestWrapper<>();
             request2.setId(ID);
             request2.setVersion(VERSION);
