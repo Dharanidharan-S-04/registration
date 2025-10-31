@@ -332,7 +332,7 @@ public class PaymentValidatorStage extends MosipVerticleAPIManager {
 			regProcLogger.error(LoggerFileConstant.SESSIONID.toString(), LoggerFileConstant.REGISTRATIONID.toString(),
 					regId, PlatformErrorMessages.RPR_PYVS_FAILED + e.getMessage()
 							+ ExceptionUtils.getStackTrace(e));
-			updateDTOsAndLogError(registrationStatusDto, RegistrationStatusCode.REPROCESS, StatusUtil.API_RESOUCE_ACCESS_FAILED, RegistrationExceptionTypeCode.APIS_RESOURCE_ACCESS_EXCEPTION, description, PlatformErrorMessages.RPR_PYVS_FAILED, e);
+			updateDTOsAndLogError(registrationStatusDto, RegistrationStatusCode.RESUMABLE, StatusUtil.API_RESOUCE_ACCESS_FAILED, RegistrationExceptionTypeCode.APIS_RESOURCE_ACCESS_EXCEPTION, description, PlatformErrorMessages.RPR_PYVS_FAILED, e);
 		} catch (Exception e) {
 			object.setIsValid(Boolean.FALSE);
 			object.setInternalError(Boolean.TRUE);
