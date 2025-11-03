@@ -482,7 +482,8 @@ public class PaymentValidatorStage extends MosipVerticleAPIManager {
 				if ("NPG_UNKNOWN_EXCEPTION".equalsIgnoreCase(errorCode)
 						|| "SERVICE_UNAVAILABLE".equalsIgnoreCase(errorCode)
 				        || "404".equalsIgnoreCase(errorCode)
-                        || "NOT_FOUND".equalsIgnoreCase(errorCode)) {
+                        || "NOT_FOUND".equalsIgnoreCase(errorCode)
+				        || "NPG-CHECK-PRN-STATUS-001".equalsIgnoreCase(errorCode)) {
 					throw new ApisResourceAccessException("External payment system unavailable: " + errorCode);
 				}
 			}
