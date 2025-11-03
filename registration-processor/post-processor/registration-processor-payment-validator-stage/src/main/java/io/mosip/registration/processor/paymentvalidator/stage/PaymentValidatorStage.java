@@ -474,6 +474,7 @@ public class PaymentValidatorStage extends MosipVerticleAPIManager {
 		prnStatusRequestDTO.setPRN(prn);
 		Object rawResponse = restApi.postApi(ApiName.GETPRNSTATUS, "", "", prnStatusRequestDTO, Object.class);
 		Map<String, Object> responseMap = (Map<String, Object>) rawResponse;
+		log.info("Raw response from GETPRNSTATUS API: {}", rawResponse);
 		if (responseMap.containsKey("errors")) {
 			List<Map<String, Object>> errors = (List<Map<String, Object>>) responseMap.get("errors");
 			if (!errors.isEmpty()) {
