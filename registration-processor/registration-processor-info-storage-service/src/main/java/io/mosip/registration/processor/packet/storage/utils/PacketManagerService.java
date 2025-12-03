@@ -135,7 +135,7 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
             if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
                     ErrorDTO errorDTO1 = response2.getErrors().iterator().next();
                 // regProcLogger.info("Second API error for id {}: code={}, message={}",
-                        id, errorDTO1.getErrorCode(), errorDTO1.getMessage());
+                        // id, errorDTO1.getErrorCode(), errorDTO1.getMessage());
                     if (OBJECT_DOESNOT_EXISTS_ERROR_CODE.equalsIgnoreCase(errorDTO1.getErrorCode())) {
                         throw new ObjectDoesnotExistsException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
                     } else {
