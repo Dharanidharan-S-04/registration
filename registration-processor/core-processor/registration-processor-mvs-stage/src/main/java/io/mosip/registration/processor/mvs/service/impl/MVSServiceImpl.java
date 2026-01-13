@@ -541,7 +541,7 @@ public class MVSServiceImpl implements MVSService {
 		String userServiceTypeValue;
 		JSONArray userServiceTypeArray = new JSONArray(requestDto.getIdentity().get("userServiceType"));
         String value = null;
-		if (!userServiceTypeArray.isEmpty()) {
+		if (userServiceTypeArray.length() > 0){
          value = userServiceTypeArray.getJSONObject(0).optString("value", null);
 		}
 		if (value != null && value.toLowerCase().contains("alien")) {
