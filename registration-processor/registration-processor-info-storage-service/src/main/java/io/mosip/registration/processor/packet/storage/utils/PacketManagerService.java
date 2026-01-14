@@ -94,177 +94,145 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
         return responseField;
     }
 
-  //   protected Map<String, String> getFields(String id, List<String> fields, String source, String process) throws ApisResourceAccessException, PacketManagerException, JsonProcessingException, IOException {
-  //       FieldDtos fieldDto = new FieldDtos(id, fields, source, process, false);
+    protected Map<String, String> getFields(String id, List<String> fields, String source, String process) throws ApisResourceAccessException, PacketManagerException, JsonProcessingException, IOException {
+        FieldDtos fieldDto = new FieldDtos(id, fields, source, process, false);
 
-  //       RequestWrapper<FieldDtos> request = new RequestWrapper<>();
-  //       request.setId(ID);
-  //       request.setVersion(VERSION);
-  //       request.setRequesttime(DateUtils.getUTCCurrentDateTime());
-  //       request.setRequest(fieldDto);
-  //       ResponseWrapper<FieldResponseDto> response = (ResponseWrapper) restApi.postApi(ApiName.PACKETMANAGER_SEARCH_FIELDS, "", "", request, ResponseWrapper.class);
+        RequestWrapper<FieldDtos> request = new RequestWrapper<>();
+        request.setId(ID);
+        request.setVersion(VERSION);
+        request.setRequesttime(DateUtils.getUTCCurrentDateTime());
+        request.setRequest(fieldDto);
+        ResponseWrapper<FieldResponseDto> response = (ResponseWrapper) restApi.postApi(ApiName.PACKETMANAGER_SEARCH_FIELDS, "", "", request, ResponseWrapper.class);
 
-  //       if (response.getErrors() != null && response.getErrors().size() > 0) {
-  //           regProcLogger.error(LoggerFileConstant.SESSIONID.toString(), LoggerFileConstant.REGISTRATIONID.toString(), id, JsonUtils.javaObjectToJsonString(response));
-  //           ErrorDTO errorDTO = response.getErrors().iterator().next();
-  //           if (OBJECT_DOESNOT_EXISTS_ERROR_CODE.equalsIgnoreCase(errorDTO.getErrorCode()))
-  //               throw new ObjectDoesnotExistsException(errorDTO.getErrorCode(), errorDTO.getMessage());
-  //           else
-  //               throw new PacketManagerException(errorDTO.getErrorCode(), errorDTO.getMessage());
-  //       }
+        if (response.getErrors() != null && response.getErrors().size() > 0) {
+            regProcLogger.error(LoggerFileConstant.SESSIONID.toString(), LoggerFileConstant.REGISTRATIONID.toString(), id, JsonUtils.javaObjectToJsonString(response));
+            ErrorDTO errorDTO = response.getErrors().iterator().next();
+            if (OBJECT_DOESNOT_EXISTS_ERROR_CODE.equalsIgnoreCase(errorDTO.getErrorCode()))
+                throw new ObjectDoesnotExistsException(errorDTO.getErrorCode(), errorDTO.getMessage());
+            else
+                throw new PacketManagerException(errorDTO.getErrorCode(), errorDTO.getMessage());
+        }
 
-  //       FieldResponseDto fieldResponseDto = objectMapper.readValue(JsonUtils.javaObjectToJsonString(response.getResponse()), FieldResponseDto.class);
+        FieldResponseDto fieldResponseDto = objectMapper.readValue(JsonUtils.javaObjectToJsonString(response.getResponse()), FieldResponseDto.class);
 
-		// regProcLogger.info("&&&&&&&&&&&&&&&&First FieldResponseDto for id {} => {}", id, fieldResponseDto);
+		regProcLogger.info("&&&&&&&&&&&&&&&&First FieldResponseDto for id {} => {}", id, fieldResponseDto);
 
-  //       try {
-  //           FieldDtos fieldDto2 = new FieldDtos(id, fields, "REGISTRATION_CLIENT", "MVS_DEMOGRAPHIC", false);
-  //           RequestWrapper<FieldDtos> request2 = new RequestWrapper<>();
-  //           request2.setId(ID);
-  //           request2.setVersion(VERSION);
-  //           request2.setRequesttime(DateUtils.getUTCCurrentDateTime());
-  //           request2.setRequest(fieldDto2);
-  //           ResponseWrapper<FieldResponseDto> response2 = (ResponseWrapper) restApi.postApi(
-  //                   ApiName.PACKETMANAGER_SEARCH_FIELDS, "", "", request2, ResponseWrapper.class);
+   //      try {
+   //          FieldDtos fieldDto2 = new FieldDtos(id, fields, "REGISTRATION_CLIENT", "MVS_DEMOGRAPHIC", false);
+   //          RequestWrapper<FieldDtos> request2 = new RequestWrapper<>();
+   //          request2.setId(ID);
+   //          request2.setVersion(VERSION);
+   //          request2.setRequesttime(DateUtils.getUTCCurrentDateTime());
+   //          request2.setRequest(fieldDto2);
+   //          ResponseWrapper<FieldResponseDto> response2 = (ResponseWrapper) restApi.postApi(
+   //                  ApiName.PACKETMANAGER_SEARCH_FIELDS, "", "", request2, ResponseWrapper.class);
    
-		// 	regProcLogger.info("Second API response2 for id {}: {}", id, JsonUtils.javaObjectToJsonString(response2));
+			// regProcLogger.info("Second API response2 for id {}: {}", id, JsonUtils.javaObjectToJsonString(response2));
 
-  //           if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
-  //                   ErrorDTO errorDTO1 = response2.getErrors().iterator().next();
-  //               regProcLogger.info("Second API error for id {}: code={}, message={}",
-  //                       id, errorDTO1.getErrorCode(), errorDTO1.getMessage());
-  //                   if (OBJECT_DOESNOT_EXISTS_ERROR_CODE.equalsIgnoreCase(errorDTO1.getErrorCode())) {
-  //                       throw new ObjectDoesnotExistsException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
-  //                   } else {
-  //                       throw new PacketManagerException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
-  //                   }
+   //          if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
+   //                  ErrorDTO errorDTO1 = response2.getErrors().iterator().next();
+   //              regProcLogger.info("Second API error for id {}: code={}, message={}",
+   //                      id, errorDTO1.getErrorCode(), errorDTO1.getMessage());
+   //                  if (OBJECT_DOESNOT_EXISTS_ERROR_CODE.equalsIgnoreCase(errorDTO1.getErrorCode())) {
+   //                      throw new ObjectDoesnotExistsException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
+   //                  } else {
+   //                      throw new PacketManagerException(errorDTO1.getErrorCode(), errorDTO1.getMessage());
+   //                  }
 
-  //           }
-
-  //          List<ErrorDTO> response2Errors = response2.getErrors();
-  //           if (response2Errors == null || response2Errors.size() == 0) {
-  //               FieldResponseDto fieldResponseDto2 = objectMapper.readValue(
-  //                       JsonUtils.javaObjectToJsonString(response2.getResponse()), FieldResponseDto.class);
-
-  //               regProcLogger.info("Second API fieldResponseDto2 for id {}: {}", id, JsonUtils.javaObjectToJsonString(fieldResponseDto2));
-
-  //               Map<String, String> finalFields = new HashMap<>();
-  //               Map<String, String> fields1 = fieldResponseDto.getFields();
-  //               Map<String, String> fields2 = fieldResponseDto2.getFields();
-				
-  //               regProcLogger.info("fields1 for id {}: {}", id, JsonUtils.javaObjectToJsonString(fields1));
-  //               regProcLogger.info("fields2 for id {}: {}", id, JsonUtils.javaObjectToJsonString(fields2));
-
-  //               Set<String> allKeys = new HashSet<>();
-  //               if (fields1 != null) allKeys.addAll(fields1.keySet());
-  //               for (String key : allKeys) {
-  //                   String value2 = fields2.get(key);
-  //                   String value1 = fields1.get(key);
-
-  //                   if (value2 != null && !value2.trim().isEmpty() && !"null".equalsIgnoreCase(value2)) {
-  //                       finalFields.put(key, value2);
-  //                   } else {
-  //                       finalFields.put(key, value1);
-  //                   }
-  //               }
-  //               regProcLogger.info("Final merged fields for id {}: {}", id, JsonUtils.javaObjectToJsonString(finalFields));
-  //               return (finalFields);
-  //           }
-  //           else {
-  //               regProcLogger.warn("Second API returned errors for id=" + id + ", using only first response");
-  //           }
-  //       }catch (Exception e) {
-  //           regProcLogger.warn("Second API call failed for id=" + id + ", using only first response", e);
-  //       }
-
-  //       return fieldResponseDto.getFields();
-  //   }
-	protected Future<Map<String, String>> getFieldsAsync(String id, List<String> fields) {
-    Promise<Map<String, String>> promise = Promise.promise();
-
-    // Run first API call in executeBlocking
-    vertx.executeBlocking(firstPromise -> {
+   //          }
+		  CompletableFuture<FieldResponseDto> futureSecondCall = CompletableFuture.supplyAsync(() -> {
         try {
-            FieldDtos fieldDto1 = new FieldDtos(id, fields, "SOURCE1", "PROCESS1", false);
-            RequestWrapper<FieldDtos> request1 = new RequestWrapper<>();
-            request1.setId(ID);
-            request1.setVersion(VERSION);
-            request1.setRequesttime(DateUtils.getUTCCurrentDateTime());
-            request1.setRequest(fieldDto1);
+            FieldDtos fieldDto2 = new FieldDtos(id, fields, "REGISTRATION_CLIENT", "MVS_DEMOGRAPHIC", false);
+            RequestWrapper<FieldDtos> request2 = new RequestWrapper<>();
+            request2.setId(ID);
+            request2.setVersion(VERSION);
+            request2.setRequesttime(DateUtils.getUTCCurrentDateTime());
+            request2.setRequest(fieldDto2);
 
-            ResponseWrapper<FieldResponseDto> response1 =
-                (ResponseWrapper) restApi.postApi(ApiName.PACKETMANAGER_SEARCH_FIELDS, "", "", request1, ResponseWrapper.class);
+            ResponseWrapper<FieldResponseDto> response2 = (ResponseWrapper) restApi.postApi(
+                    ApiName.PACKETMANAGER_SEARCH_FIELDS, "", "", request2, ResponseWrapper.class);
 
-            if (response1.getErrors() != null && !response1.getErrors().isEmpty()) {
-                firstPromise.fail(new PacketManagerException(
-                    response1.getErrors().get(0).getErrorCode(),
-                    response1.getErrors().get(0).getMessage()
-                ));
-                return;
+            if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
+                ErrorDTO error2 = response2.getErrors().get(0);
+                throw new PacketManagerException(error2.getErrorCode(), error2.getMessage());
             }
-            FieldResponseDto fieldResponseDto1 = objectMapper.readValue(
-                JsonUtils.javaObjectToJsonString(response1.getResponse()), FieldResponseDto.class
-            );
-            firstPromise.complete(fieldResponseDto1);
+
+            return objectMapper.readValue(JsonUtils.javaObjectToJsonString(response2.getResponse()), FieldResponseDto.class);
+
         } catch (Exception e) {
-            firstPromise.fail(e);
+            regProcLogger.warn("Second API call failed or timed out for id=" + id + ", using only first response", e);
+            return null;
         }
-    }, res1 -> {
-        if (res1.failed()) {
-            promise.fail(res1.cause());
-            return;
-        }
-        FieldResponseDto response1Dto = (FieldResponseDto) res1.result();
-
-        // Run second API call in parallel
-        vertx.executeBlocking(secondPromise -> {
-            try {
-                FieldDtos fieldDto2 = new FieldDtos(id, fields, "REGISTRATION_CLIENT", "MVS_DEMOGRAPHIC", false);
-                RequestWrapper<FieldDtos> request2 = new RequestWrapper<>();
-                request2.setId(ID);
-                request2.setVersion(VERSION);
-                request2.setRequesttime(DateUtils.getUTCCurrentDateTime());
-                request2.setRequest(fieldDto2);
-
-                ResponseWrapper<FieldResponseDto> response2 =
-                    (ResponseWrapper) restApi.postApi(ApiName.PACKETMANAGER_SEARCH_FIELDS, "", "", request2, ResponseWrapper.class);
-
-                if (response2.getErrors() != null && !response2.getErrors().isEmpty()) {
-                    secondPromise.fail(new PacketManagerException(
-                        response2.getErrors().get(0).getErrorCode(),
-                        response2.getErrors().get(0).getMessage()
-                    ));
-                    return;
-                }
-                FieldResponseDto fieldResponseDto2 = objectMapper.readValue(
-                    JsonUtils.javaObjectToJsonString(response2.getResponse()), FieldResponseDto.class
-                );
-                secondPromise.complete(fieldResponseDto2);
-            } catch (Exception e) {
-                secondPromise.fail(e);
-            }
-        }, res2 -> {
-            Map<String, String> finalFields = new HashMap<>(response1Dto.getFields());
-
-            if (res2.succeeded()) {
-                FieldResponseDto response2Dto = (FieldResponseDto) res2.result();
-                Map<String, String> fields2 = response2Dto.getFields();
-
-                // Merge fields
-                for (String key : finalFields.keySet()) {
-                    String value2 = fields2.get(key);
-                    if (value2 != null && !value2.trim().isEmpty() && !"null".equalsIgnoreCase(value2)) {
-                        finalFields.put(key, value2);
-                    }
-                }
-            } else {
-                regProcLogger.warn("Second API failed for id={}, using only first response", id, res2.cause());
-            }
-            promise.complete(finalFields);
-        });
     });
 
-    return promise.future();
+	    FieldResponseDto fieldResponseDto2 = null;
+	    try {
+	        // Wait for second call but with timeout
+	        fieldResponseDto2 = futureSecondCall.get(10, TimeUnit.SECONDS);
+	    } catch (Exception e) {
+	        regProcLogger.warn("Second API call timeout for id=" + id + ", using only first response", e);
+	    }
+    //        List<ErrorDTO> response2Errors = response2.getErrors();
+    //         if (response2Errors == null || response2Errors.size() == 0) {
+    //             FieldResponseDto fieldResponseDto2 = objectMapper.readValue(
+    //                     JsonUtils.javaObjectToJsonString(response2.getResponse()), FieldResponseDto.class);
+
+    //             regProcLogger.info("Second API fieldResponseDto2 for id {}: {}", id, JsonUtils.javaObjectToJsonString(fieldResponseDto2));
+
+    //             Map<String, String> finalFields = new HashMap<>();
+    //             Map<String, String> fields1 = fieldResponseDto.getFields();
+    //             Map<String, String> fields2 = fieldResponseDto2.getFields();
+				
+    //             regProcLogger.info("fields1 for id {}: {}", id, JsonUtils.javaObjectToJsonString(fields1));
+    //             regProcLogger.info("fields2 for id {}: {}", id, JsonUtils.javaObjectToJsonString(fields2));
+
+    //             Set<String> allKeys = new HashSet<>();
+    //             if (fields1 != null) allKeys.addAll(fields1.keySet());
+    //             for (String key : allKeys) {
+    //                 String value2 = fields2.get(key);
+    //                 String value1 = fields1.get(key);
+
+    //                 if (value2 != null && !value2.trim().isEmpty() && !"null".equalsIgnoreCase(value2)) {
+    //                     finalFields.put(key, value2);
+    //                 } else {
+    //                     finalFields.put(key, value1);
+    //                 }
+    //             }
+    //             regProcLogger.info("Final merged fields for id {}: {}", id, JsonUtils.javaObjectToJsonString(finalFields));
+    //             return (finalFields);
+    //         }
+    //         else {
+    //             regProcLogger.warn("Second API returned errors for id=" + id + ", using only first response");
+    //         }
+    //     }catch (Exception e) {
+    //         regProcLogger.warn("Second API call failed for id=" + id + ", using only first response", e);
+    //     }
+
+    //     return fieldResponseDto.getFields();
+    // }
+		if (fieldResponseDto2 != null && fieldResponseDto2.getFields() != null) {
+        Map<String, String> mergedFields = new HashMap<>();
+        Map<String, String> fields1 = fieldResponseDto.getFields();
+        Map<String, String> fields2 = fieldResponseDto2.getFields();
+
+        Set<String> allKeys = new HashSet<>();
+        if (fields1 != null) allKeys.addAll(fields1.keySet());
+        for (String key : allKeys) {
+            String value2 = fields2.get(key);
+            String value1 = fields1.get(key);
+            if (value2 != null && !value2.trim().isEmpty() && !"null".equalsIgnoreCase(value2)) {
+                mergedFields.put(key, value2);
+            } else {
+                mergedFields.put(key, value1);
+            }
+        }
+
+        regProcLogger.info("Final merged fields for id {}: {}", id, JsonUtils.javaObjectToJsonString(mergedFields));
+        return mergedFields;
+    }
+
+    // Return first call fields if second call failed
+    return fieldResponseDto.getFields();
 }
 
     protected Document getDocument(String id, String documentName, String process) throws ApisResourceAccessException, PacketManagerException, JsonProcessingException, IOException {
