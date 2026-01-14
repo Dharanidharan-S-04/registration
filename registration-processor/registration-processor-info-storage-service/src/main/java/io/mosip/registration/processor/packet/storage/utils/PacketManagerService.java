@@ -168,7 +168,7 @@ public class PacketManagerService extends PriorityBasedPacketManagerService {
 	    FieldResponseDto fieldResponseDto2 = null;
 	    try {
 	        // Wait for second call but with timeout
-	        fieldResponseDto2 = futureSecondCall.get(10, TimeUnit.SECONDS);
+	        fieldResponseDto2 = futureSecondCall.get(60, TimeUnit.SECONDS);
 	    } catch (Exception e) {
 	        regProcLogger.warn("Second API call timeout for id=" + id + ", using only first response", e);
 	    }
