@@ -538,7 +538,7 @@ public class MVSServiceImpl implements MVSService {
 				packetManagerService.getFields(id, demographicMap.values().stream().collect(Collectors.toList()),
 						process, ProviderStageName.MVS));
 
-		String userServiceTypeValue;
+		String userServiceTypeValue =null;
 		String value = null;
 		JSONArray userServiceTypeArray = null;
 		try {
