@@ -552,8 +552,8 @@ public class MVSServiceImpl implements MVSService {
   				  // handle JSON parsing error if needed, e.g. log it
   					  value = null; // safe fallback
 		}
-		if (value != null){ if(value.toLowerCase().contains("alien")) {
-          userServiceTypeValue = value;} 
+		if (value != null){
+          userServiceTypeValue = value; 
 		}else if (process.equals("RENEWAL")) {
 			userServiceTypeValue = "Renewal";
 		} else if (process.equals("FIRSTID")) {
